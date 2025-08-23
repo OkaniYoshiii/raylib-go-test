@@ -132,8 +132,20 @@ func DrawMainMenu() {
 		return button
 	}()
 
-	rl.DrawRectangleRec(button, rl.Red)
-	rl.DrawText(text.Content, text.PosX, text.PosY, text.FontSize, rl.Black)
+	btnColor := rl.Red
+	textColor := rl.Black
+
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), button) {
+		btnColor = rl.Black
+		textColor = rl.Red
+
+		if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+			screen = Level1
+		}
+	}
+
+	rl.DrawRectangleRec(button, btnColor)
+	rl.DrawText(text.Content, text.PosX, text.PosY, text.FontSize, textColor)
 }
 
 type Text struct {
