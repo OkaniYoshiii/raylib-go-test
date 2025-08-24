@@ -3,14 +3,16 @@ package scenes
 import (
 	"fmt"
 
+	"github.com/OkaniYoshiii/raylib-go-test/internal/overlays"
 	"github.com/OkaniYoshiii/raylib-go-test/internal/ui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type MainMenu struct {
-	Title  ui.Text
-	Text   ui.Text
-	Button ui.Button
+	Title   ui.Text
+	Text    ui.Text
+	Button  ui.Button
+	Overlay overlays.Menu
 }
 
 func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
@@ -68,10 +70,13 @@ func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
 		return button
 	}()
 
+	menuOverlay := overlays.NewMenu(screenWidth, screenHeight)
+
 	return MainMenu{
-		Title:  title,
-		Text:   text,
-		Button: button,
+		Title:   title,
+		Text:    text,
+		Button:  button,
+		Overlay: menuOverlay,
 	}
 }
 
@@ -79,6 +84,15 @@ func (mM *MainMenu) Update() {
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), mM.Button.Rectangle) {
 		mM.Button.Color = rl.Black
 		mM.Text.Color = rl.Red
+	}
+
+	if mM.Overlay.IsVisible {
+		isClickOutsideOfBackground := rl.IsMouseButtonPressed(rl.MouseButtonLeft) && !rl.CheckCollisionPointRec(rl.GetMousePosition(), mM.Overlay.Background.Rectangle)
+		if isClickOutsideOfBackground || rl.IsKeyPressed(rl.KeyEscape) {
+			mM.Overlay.IsVisible = !mM.Overlay.IsVisible
+		}
+	} else if rl.IsKeyPressed(rl.KeyEscape) {
+		mM.Overlay.IsVisible = true
 	}
 }
 
@@ -88,4 +102,8 @@ func (mM *MainMenu) Draw() {
 
 	rl.DrawRectangleRec(mM.Button.Rectangle, mM.Button.Color)
 	rl.DrawText(mM.Text.Content, mM.Text.PosX, mM.Text.PosY, mM.Text.FontSize, mM.Text.Color)
+
+	if mM.Overlay.IsVisible {
+		mM.Overlay.Draw()
+	}
 }

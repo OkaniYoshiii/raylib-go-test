@@ -3,6 +3,7 @@
 package main
 
 import (
+	"github.com/OkaniYoshiii/raylib-go-test/internal/overlays"
 	"github.com/OkaniYoshiii/raylib-go-test/internal/scenes"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -13,12 +14,15 @@ const windowTitle = "Raylib Go Test"
 const targetFPS = 60
 
 var scene scenes.Scene
+var overlay overlays.Overlay
 
 func main() {
 	// IMPORTANT: Init window must be the first Raylib function to be called
 	// If not, some functions like "rl.MeasureText" won't work
 	rl.InitWindow(screenWidth, screenHeight, windowTitle)
 	defer rl.CloseWindow()
+
+	rl.SetExitKey(0)
 
 	mainMenu := scenes.NewMainMenu(screenWidth, screenHeight)
 	scene = &mainMenu
