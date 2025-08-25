@@ -45,13 +45,9 @@ func (grid *Grid) Inventory() GridInventory {
 	}
 }
 
-type HUD struct {
-	InventoryBar ui.InventoryBar
-}
-
 type LevelOne struct {
 	Grid Grid
-	HUD  HUD
+	HUD  ui.HUD
 }
 
 func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
@@ -96,7 +92,7 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 
 	return LevelOne{
 		Grid: grid,
-		HUD: HUD{
+		HUD: ui.HUD{
 			InventoryBar: inventoryBar,
 		},
 	}
