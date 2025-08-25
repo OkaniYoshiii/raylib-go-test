@@ -31,7 +31,7 @@ func main() {
 
 	for !rl.WindowShouldClose() {
 		if mainMenu, ok := scene.(*scenes.MainMenu); ok {
-			if rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Button.Rectangle) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+			if !mainMenu.Overlay.IsVisible && rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Button.Rectangle) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 				lvlOne := scenes.NewLevelOne(screenWidth, screenHeight)
 				scene = &lvlOne
 			}

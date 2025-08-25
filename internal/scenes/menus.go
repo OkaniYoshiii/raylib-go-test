@@ -81,18 +81,20 @@ func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
 }
 
 func (menu *MainMenu) Update() {
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Button.Rectangle) {
-		menu.Button.Color = rl.Black
-		menu.Text.Color = rl.Red
-	}
-
 	if menu.Overlay.IsVisible {
 		isClickOutsideOfBackground := rl.IsMouseButtonPressed(rl.MouseButtonLeft) && !rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Overlay.Background.Rectangle)
 		if isClickOutsideOfBackground || rl.IsKeyPressed(rl.KeyEscape) {
 			menu.Overlay.IsVisible = !menu.Overlay.IsVisible
 		}
-	} else if rl.IsKeyPressed(rl.KeyEscape) {
-		menu.Overlay.IsVisible = true
+	} else {
+		if rl.IsKeyPressed(rl.KeyEscape) {
+			menu.Overlay.IsVisible = true
+		}
+
+		if rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Button.Rectangle) {
+			menu.Button.Color = rl.Black
+			menu.Text.Color = rl.Red
+		}
 	}
 }
 
