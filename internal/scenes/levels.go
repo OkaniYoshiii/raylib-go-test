@@ -111,8 +111,12 @@ func (lvl *LevelOne) Update() {
 	inventory := lvl.Grid.Inventory()
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		for i := range len(lvl.Grid.Cells) {
-			if inventory.Homes < MaxHomes && rl.CheckCollisionPointRec(rl.GetMousePosition(), lvl.Grid.Cells[i].Rectangle) {
+		for i, cell := range lvl.Grid.Cells {
+			if inventory.Homes < MaxHomes && rl.CheckCollisionPointRec(rl.GetMousePosition(), cell.Rectangle) {
+				if cell.Type == entities.Home {
+					continue
+				}
+
 				lvl.Grid.Cells[i].Type = entities.Home
 				lvl.HUD.HomeCounter.Count++
 			}
