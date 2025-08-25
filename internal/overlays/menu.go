@@ -24,7 +24,7 @@ func NewMenu(screenWidth int32, screenHeight int32) Menu {
 	text := func() ui.Text {
 		text := ui.Text{}
 
-		text.Content = "Return to main menu"
+		text.Content = "Quit game"
 		text.FontSize = 16
 		text.Color = rl.Red
 
@@ -78,9 +78,6 @@ func NewMenu(screenWidth int32, screenHeight int32) Menu {
 		Text:       text,
 		Background: background,
 	}
-}
-
-func (menu *Menu) Update() {
 }
 
 func (menu *Menu) Draw() {
