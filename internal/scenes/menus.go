@@ -80,30 +80,30 @@ func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
 	}
 }
 
-func (mM *MainMenu) Update() {
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), mM.Button.Rectangle) {
-		mM.Button.Color = rl.Black
-		mM.Text.Color = rl.Red
+func (menu *MainMenu) Update() {
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Button.Rectangle) {
+		menu.Button.Color = rl.Black
+		menu.Text.Color = rl.Red
 	}
 
-	if mM.Overlay.IsVisible {
-		isClickOutsideOfBackground := rl.IsMouseButtonPressed(rl.MouseButtonLeft) && !rl.CheckCollisionPointRec(rl.GetMousePosition(), mM.Overlay.Background.Rectangle)
+	if menu.Overlay.IsVisible {
+		isClickOutsideOfBackground := rl.IsMouseButtonPressed(rl.MouseButtonLeft) && !rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Overlay.Background.Rectangle)
 		if isClickOutsideOfBackground || rl.IsKeyPressed(rl.KeyEscape) {
-			mM.Overlay.IsVisible = !mM.Overlay.IsVisible
+			menu.Overlay.IsVisible = !menu.Overlay.IsVisible
 		}
 	} else if rl.IsKeyPressed(rl.KeyEscape) {
-		mM.Overlay.IsVisible = true
+		menu.Overlay.IsVisible = true
 	}
 }
 
-func (mM *MainMenu) Draw() {
+func (menu *MainMenu) Draw() {
 	rl.ClearBackground(rl.White)
-	rl.DrawText(mM.Title.Content, mM.Title.PosX, mM.Title.PosY, mM.Title.FontSize, rl.Red)
+	rl.DrawText(menu.Title.Content, menu.Title.PosX, menu.Title.PosY, menu.Title.FontSize, rl.Red)
 
-	rl.DrawRectangleRec(mM.Button.Rectangle, mM.Button.Color)
-	rl.DrawText(mM.Text.Content, mM.Text.PosX, mM.Text.PosY, mM.Text.FontSize, mM.Text.Color)
+	rl.DrawRectangleRec(menu.Button.Rectangle, menu.Button.Color)
+	rl.DrawText(menu.Text.Content, menu.Text.PosX, menu.Text.PosY, menu.Text.FontSize, menu.Text.Color)
 
-	if mM.Overlay.IsVisible {
-		mM.Overlay.Draw()
+	if menu.Overlay.IsVisible {
+		menu.Overlay.Draw()
 	}
 }
