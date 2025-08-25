@@ -17,4 +17,5 @@ type Text struct {
 type Button struct {
 	rl.Rectangle
 	Color color.RGBA
+	Text  Text
 }

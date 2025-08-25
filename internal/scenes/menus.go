@@ -1,8 +1,6 @@
 package scenes
 
 import (
-	"fmt"
-
 	"github.com/OkaniYoshiii/raylib-go-test/internal/overlays"
 	"github.com/OkaniYoshiii/raylib-go-test/internal/ui"
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -22,7 +20,6 @@ func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
 		width := rl.MeasureText(content, fontSize)
 
 		posX, posY := screenWidth/2-width/2, screenHeight/2-fontSize/2
-		fmt.Println(width, screenWidth, screenHeight, posX, posY)
 
 		return ui.Text{
 			Content:  content,

@@ -2,9 +2,9 @@ package scenes
 
 import (
 	"image/color"
-	"log"
 
 	"github.com/OkaniYoshiii/raylib-go-test/internal/entities"
+	"github.com/OkaniYoshiii/raylib-go-test/internal/ui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -45,33 +45,25 @@ func (grid *Grid) Inventory() GridInventory {
 	}
 }
 
+type HUD struct {
+	InventoryBar ui.InventoryBar
+}
+
 type LevelOne struct {
 	Grid Grid
+	HUD  HUD
 }
 
 func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
+	inventoryBar := ui.NewInventoryBar(screenWidth, screenHeight)
+
 	grid := func() Grid {
 		grid := Grid{}
 
-		size := 0
-		if screenWidth > screenHeight {
-			size = int(float32(screenHeight) * 0.85)
-		} else {
-			size = int(float32(screenWidth) * 0.85)
-		}
-
-		// If int not divisable by 2 then it's even so we add one to fix it
-		// Prevent placing grid on a subpixel
-		if size%2 != 0 {
-			size++
-		}
-
-		if screenWidth < size || screenHeight < size {
-			log.Fatalf("not enought screen space to create the grid")
-		}
+		size := 400
 
 		grid.X = float32(screenWidth/2 - size/2)
-		grid.Y = float32(screenHeight/2 - size/2)
+		grid.Y = inventoryBar.Y - float32(size) - 20
 
 		grid.Width = float32(size)
 		grid.Height = float32(size)
@@ -104,6 +96,9 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 
 	return LevelOne{
 		Grid: grid,
+		HUD: HUD{
+			InventoryBar: inventoryBar,
+		},
 	}
 }
 
@@ -125,4 +120,6 @@ func (lvl *LevelOne) Draw() {
 	for _, cell := range lvl.Grid.Cells {
 		cell.Draw()
 	}
+
+	lvl.HUD.InventoryBar.Draw()
 }
