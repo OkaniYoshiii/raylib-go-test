@@ -27,3 +27,26 @@ func (cell *Cell) Draw() {
 		rl.DrawRectangleRec(cell.Rectangle, color)
 	}
 }
+
+type HomeCell struct {
+	Cell
+}
+
+func (home *HomeCell) Draw() {
+	color := rl.Green
+	rl.DrawRectangleRec(home.Cell.Rectangle, color)
+}
+
+type EmptyCell struct {
+	Cell
+}
+
+func (empty *EmptyCell) Draw() {
+	color := rl.Red
+	rl.DrawRectangleLines(int32(empty.Cell.X), int32(empty.Cell.Y), int32(empty.Cell.Width), int32(empty.Cell.Height), color)
+}
+
+type CellInterface interface {
+	Draw()
+	ChangeTo(cellType CellType)
+}

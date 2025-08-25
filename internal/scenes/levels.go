@@ -1,7 +1,6 @@
 package scenes
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 
@@ -9,11 +8,41 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+const (
+	MaxHomes int = 5
+)
+
+type GridInventory struct {
+	Empty int
+	Homes int
+}
+
 type Grid struct {
 	rl.Rectangle
 
 	Color color.RGBA
 	Cells []entities.Cell
+}
+
+func (grid *Grid) Inventory() GridInventory {
+	empty := 0
+	homes := 0
+
+	for _, cell := range grid.Cells {
+		switch cell.Type {
+		case entities.Empty:
+			empty++
+		case entities.Home:
+			homes++
+		default:
+			continue
+		}
+	}
+
+	return GridInventory{
+		Empty: empty,
+		Homes: homes,
+	}
 }
 
 type LevelOne struct {
@@ -58,7 +87,6 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 		rowCount := 20
 		cellWidth := int(grid.Width) / rowCount
 		cellHeight := int(grid.Height) / (count / rowCount)
-		fmt.Println(grid.Height, cellHeight)
 		for i := range cells {
 			row := i / rowCount
 			col := i % rowCount
@@ -80,10 +108,11 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 }
 
 func (lvl *LevelOne) Update() {
+	inventory := lvl.Grid.Inventory()
+
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		fmt.Println("Cell type changed")
 		for i := range len(lvl.Grid.Cells) {
-			if rl.CheckCollisionPointRec(rl.GetMousePosition(), lvl.Grid.Cells[i].Rectangle) {
+			if inventory.Homes < MaxHomes && rl.CheckCollisionPointRec(rl.GetMousePosition(), lvl.Grid.Cells[i].Rectangle) {
 				lvl.Grid.Cells[i].Type = entities.Home
 			}
 		}
