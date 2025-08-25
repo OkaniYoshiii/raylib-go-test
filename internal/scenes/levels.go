@@ -112,6 +112,17 @@ func (lvl *LevelOne) Update() {
 			}
 		}
 	}
+
+	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		for i := range lvl.HUD.InventoryBar.Buttons {
+			button := &lvl.HUD.InventoryBar.Buttons[i]
+			if rl.CheckCollisionPointRec(rl.GetMousePosition(), button.Rectangle) {
+				button.State = ui.ButtonStateFocus
+			} else {
+				button.State = ui.ButtonStateNone
+			}
+		}
+	}
 }
 
 func (lvl *LevelOne) Draw() {

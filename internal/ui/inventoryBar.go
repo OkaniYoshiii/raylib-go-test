@@ -58,21 +58,29 @@ func NewInventoryBar(screenWidth int, screenHeight int) InventoryBar {
 			button.Width = float32(buttonSize)
 			button.Height = float32(buttonSize)
 
-			button.Color = color.RGBA{
-				A: 200,
-			}
-
 			buttons[i] = button
 		}
 
 		buttons[EmptyButton].Color = color.RGBA{
-			A: 200,
+			A: 150,
 		}
+
+		buttons[EmptyButton].FocusColor = func() color.RGBA {
+			color := buttons[EmptyButton].Color
+			color.A = 255
+			return color
+		}()
 
 		buttons[HomeButton].Color = color.RGBA{
 			G: 255,
-			A: 200,
+			A: 150,
 		}
+
+		buttons[HomeButton].FocusColor = func() color.RGBA {
+			color := buttons[HomeButton].Color
+			color.A = 255
+			return color
+		}()
 
 		return buttons
 	}()
@@ -84,6 +92,6 @@ func (inventoryBar *InventoryBar) Draw() {
 	rl.DrawRectangleRec(inventoryBar.Rectangle, inventoryBar.Color)
 
 	for _, button := range inventoryBar.Buttons {
-		rl.DrawRectangleRec(button.Rectangle, button.Color)
+		button.Draw()
 	}
 }
