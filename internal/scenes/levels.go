@@ -1,18 +1,19 @@
 package scenes
 
 import (
+	"fmt"
 	"image/color"
 	"log"
 
+	"github.com/OkaniYoshiii/raylib-go-test/internal/entities"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Grid struct {
 	rl.Rectangle
 
-	Color       color.RGBA
-	RowCount    int
-	ColumnCount int
+	Color color.RGBA
+	Cells []entities.Cell
 }
 
 type LevelOne struct {
@@ -36,8 +37,6 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 			size++
 		}
 
-		grid.RowCount, grid.ColumnCount = 25, 25
-
 		if screenWidth < size || screenHeight < size {
 			log.Fatalf("not enought screen space to create the grid")
 		}
@@ -53,27 +52,48 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 		return grid
 	}()
 
+	cells := func() []entities.Cell {
+		count := 400
+		cells := make([]entities.Cell, count)
+		rowCount := 20
+		cellWidth := int(grid.Width) / rowCount
+		cellHeight := int(grid.Height) / (count / rowCount)
+		fmt.Println(grid.Height, cellHeight)
+		for i := range cells {
+			row := i / rowCount
+			col := i % rowCount
+
+			cells[i].X = float32(int(grid.X) + col*cellWidth)
+			cells[i].Y = float32(int(grid.Y) + row*cellHeight)
+			cells[i].Width = float32(cellWidth)
+			cells[i].Height = float32(cellHeight)
+		}
+
+		return cells
+	}()
+
+	grid.Cells = cells
+
 	return LevelOne{
 		Grid: grid,
 	}
 }
 
 func (lvl *LevelOne) Update() {
-
+	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		fmt.Println("Cell type changed")
+		for i := range len(lvl.Grid.Cells) {
+			if rl.CheckCollisionPointRec(rl.GetMousePosition(), lvl.Grid.Cells[i].Rectangle) {
+				lvl.Grid.Cells[i].Type = entities.Home
+			}
+		}
+	}
 }
 
 func (lvl *LevelOne) Draw() {
 	rl.ClearBackground(rl.White)
 
-	cellWidth := int(lvl.Grid.Width) / lvl.Grid.RowCount
-	cellHeight := int(lvl.Grid.Height) / lvl.Grid.ColumnCount
-
-	for i := range lvl.Grid.RowCount {
-		for j := range lvl.Grid.ColumnCount {
-			x := int32(int(lvl.Grid.X) + (i * cellWidth))
-			y := int32(int(lvl.Grid.Y) + (j * cellHeight))
-
-			rl.DrawRectangleLines(x, y, int32(cellWidth), int32(cellHeight), lvl.Grid.Color)
-		}
+	for _, cell := range lvl.Grid.Cells {
+		cell.Draw()
 	}
 }

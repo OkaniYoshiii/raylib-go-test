@@ -30,6 +30,11 @@ func main() {
 	rl.SetTargetFPS(targetFPS)
 
 	for !rl.WindowShouldClose() {
+		rl.BeginDrawing()
+
+		scene.Update()
+		scene.Draw()
+
 		if mainMenu, ok := scene.(*scenes.MainMenu); ok {
 			if !mainMenu.Overlay.IsVisible && rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Button.Rectangle) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 				lvlOne := scenes.NewLevelOne(screenWidth, screenHeight)
@@ -43,10 +48,6 @@ func main() {
 			}
 		}
 
-		scene.Update()
-
-		rl.BeginDrawing()
-		scene.Draw()
 		rl.EndDrawing()
 	}
 }
