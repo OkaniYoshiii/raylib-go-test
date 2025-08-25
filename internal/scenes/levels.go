@@ -45,13 +45,12 @@ func (grid *Grid) Inventory() GridInventory {
 	}
 }
 
-type HUD struct {
-	InventoryBar ui.InventoryBar
-}
-
 type LevelOne struct {
 	Grid Grid
-	HUD  HUD
+	HUD  struct {
+		InventoryBar ui.InventoryBar
+		HomeCounter  ui.Counter
+	}
 }
 
 func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
@@ -92,12 +91,18 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 		return cells
 	}()
 
+	homeCounter := ui.NewCounter(15, 15, "Homes", 16)
+
 	grid.Cells = cells
 
 	return LevelOne{
 		Grid: grid,
-		HUD: HUD{
+		HUD: struct {
+			InventoryBar ui.InventoryBar
+			HomeCounter  ui.Counter
+		}{
 			InventoryBar: inventoryBar,
+			HomeCounter:  homeCounter,
 		},
 	}
 }
@@ -109,6 +114,7 @@ func (lvl *LevelOne) Update() {
 		for i := range len(lvl.Grid.Cells) {
 			if inventory.Homes < MaxHomes && rl.CheckCollisionPointRec(rl.GetMousePosition(), lvl.Grid.Cells[i].Rectangle) {
 				lvl.Grid.Cells[i].Type = entities.Home
+				lvl.HUD.HomeCounter.Count++
 			}
 		}
 	}
@@ -133,4 +139,5 @@ func (lvl *LevelOne) Draw() {
 	}
 
 	lvl.HUD.InventoryBar.Draw()
+	lvl.HUD.HomeCounter.Draw()
 }

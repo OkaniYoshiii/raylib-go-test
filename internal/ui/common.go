@@ -21,6 +21,10 @@ type Text struct {
 	Color    color.RGBA
 }
 
+func (text *Text) Draw() {
+	rl.DrawText(text.Content, text.PosX, text.PosY, text.FontSize, text.Color)
+}
+
 type Button struct {
 	rl.Rectangle
 	Text       Text
