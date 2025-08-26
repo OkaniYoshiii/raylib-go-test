@@ -19,10 +19,25 @@ type Text struct {
 	HoverState[TextProperties]
 }
 
+func (text *Text) Rectangle() rl.Rectangle {
+	rect := rl.Rectangle{}
+
+	rect.X = text.X
+	rect.Y = text.Y
+	rect.Width = float32(rl.MeasureText(text.Content, text.FontSize))
+	rect.Height = float32(text.FontSize)
+
+	return rect
+}
+
 func (text *Text) DrawFocus() {
 	properties := text.OnHover(text.TextProperties)
 
 	text.draw(properties)
+}
+
+func (text *Text) Draw() {
+	text.draw(text.TextProperties)
 }
 
 func (text *Text) draw(properties TextProperties) {

@@ -14,6 +14,13 @@ type MainMenu struct {
 }
 
 func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
+	title := ui.Text{}
+	title.Content = "UntitledGame"
+	title.Color = rl.Red
+	title.FontSize = 24
+	title.X = float32((screenWidth / 2) - (rl.MeasureText(title.Content, title.FontSize) / 2))
+	title.Y = float32((screenHeight / 2) - (title.FontSize / 2))
+
 	button := ui.Button{
 		ButtonProperties: ui.ButtonProperties{
 			Vector2: rl.Vector2{
@@ -66,6 +73,7 @@ func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
 			Elements: []ui.Component{
 				&button,
 				&buttonTwo,
+				&title,
 			},
 		},
 	}
