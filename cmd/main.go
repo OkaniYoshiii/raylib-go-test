@@ -35,18 +35,18 @@ func main() {
 		scene.Update()
 		scene.Draw()
 
-		if mainMenu, ok := scene.(*scenes.MainMenu); ok {
-			if !mainMenu.Overlay.IsVisible && rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Button.Rectangle) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-				lvlOne := scenes.NewLevelOne(screenWidth, screenHeight)
-				scene = &lvlOne
-			}
+		// if mainMenu, ok := scene.(*scenes.MainMenu); ok {
+		// if !mainMenu.Overlay.IsVisible && rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Button.Rectangle()) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		// 	lvlOne := scenes.NewLevelOne(screenWidth, screenHeight)
+		// 	scene = &lvlOne
+		// }
 
-			if mainMenu.Overlay.IsVisible {
-				if rl.IsMouseButtonPressed(rl.MouseButtonLeft) && rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Overlay.Button.Rectangle) {
-					break
-				}
-			}
-		}
+		// if mainMenu.Overlay.IsVisible {
+		// 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) && rl.CheckCollisionPointRec(rl.GetMousePosition(), mainMenu.Overlay.Button.Rectangle()) {
+		// 		break
+		// 	}
+		// }
+		// }
 
 		rl.EndDrawing()
 	}

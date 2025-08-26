@@ -91,7 +91,14 @@ func NewLevelOne(screenWidth int, screenHeight int) LevelOne {
 		return cells
 	}()
 
-	homeCounter := ui.NewCounter(15, 15, "Homes", 16)
+	homeCounter := ui.Counter{
+		Label:    "Homes",
+		FontSize: 16,
+		Color:    rl.Black,
+	}
+
+	homeCounter.X = 15
+	homeCounter.Y = 15
 
 	grid.Cells = cells
 
@@ -126,10 +133,10 @@ func (lvl *LevelOne) Update() {
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		for i := range lvl.HUD.InventoryBar.Buttons {
 			button := &lvl.HUD.InventoryBar.Buttons[i]
-			if rl.CheckCollisionPointRec(rl.GetMousePosition(), button.Rectangle) {
-				button.State = ui.ButtonStateFocus
+			if rl.CheckCollisionPointRec(rl.GetMousePosition(), button.State.Rectangle) {
+				button.State = button.FocusState
 			} else {
-				button.State = ui.ButtonStateNone
+				button.ResetState()
 			}
 		}
 	}

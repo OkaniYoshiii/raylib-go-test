@@ -17,14 +17,19 @@ const (
 	HomeButton
 )
 
-type InventoryBar struct {
+type inventoryBarState struct {
 	rl.Rectangle
 
-	Color       color.RGBA
+	Color color.RGBA
+}
+
+type InventoryBar struct {
+	inventoryBarState
+
 	EmptyButton Button
 	HomeButton  Button
 
-	Buttons [ButtonsCount]Button
+	Buttons [ButtonsCount]Box
 }
 
 func NewInventoryBar(screenWidth int, screenHeight int) InventoryBar {
@@ -44,43 +49,23 @@ func NewInventoryBar(screenWidth int, screenHeight int) InventoryBar {
 		A: 200,
 	}
 
-	inventoryBar.Buttons = func() [ButtonsCount]Button {
-		buttons := [ButtonsCount]Button{}
+	inventoryBar.Buttons = func() [ButtonsCount]Box {
+		buttons := [ButtonsCount]Box{}
 
-		y := inventoryBar.Y + float32(padding)
+		backgroundColors := [ButtonsCount]color.RGBA{}
+		backgroundColors[EmptyButton] = color.RGBA{A: 150}
+		backgroundColors[HomeButton] = color.RGBA{G: 255, A: 150}
+		for i := range ButtonsCount {
+			button := Box{}
 
-		for i := range cap(buttons) {
-			button := Button{}
-
-			button.X = inventoryBar.X + float32(padding) + ((float32(buttonSize + gap)) * float32(i))
-			button.Y = y
-
-			button.Width = float32(buttonSize)
-			button.Height = float32(buttonSize)
+			button.X = 0
+			button.Y = 0
+			button.Width = 50
+			button.Height = 50
+			button.State.Color = rl.Black
 
 			buttons[i] = button
 		}
-
-		buttons[EmptyButton].Color = color.RGBA{
-			A: 150,
-		}
-
-		buttons[EmptyButton].FocusColor = func() color.RGBA {
-			color := buttons[EmptyButton].Color
-			color.A = 255
-			return color
-		}()
-
-		buttons[HomeButton].Color = color.RGBA{
-			G: 255,
-			A: 150,
-		}
-
-		buttons[HomeButton].FocusColor = func() color.RGBA {
-			color := buttons[HomeButton].Color
-			color.A = 255
-			return color
-		}()
 
 		return buttons
 	}()

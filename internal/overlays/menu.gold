@@ -15,42 +15,21 @@ type Background struct {
 
 type Menu struct {
 	Button     ui.Button
-	Text       ui.Text
 	Background Background
 	IsVisible  bool
 }
 
 func NewMenu(screenWidth int32, screenHeight int32) Menu {
-	text := func() ui.Text {
-		text := ui.Text{}
-
-		text.Content = "Quit game"
-		text.FontSize = 16
-		text.Color = rl.Red
-
-		width := rl.MeasureText(text.Content, text.FontSize)
-
-		text.PosX = screenWidth/2 - width/2
-		text.PosY = screenHeight/2 - width/2
-
-		return text
-	}()
-
-	button := func() ui.Button {
-		button := ui.Button{}
-
-		padding := int32(12)
-
-		button.Width = float32(rl.MeasureText(text.Content, text.FontSize) + (padding * 2))
-		button.Height = float32(text.FontSize + (padding * 2))
-
-		button.X = float32(text.PosX - padding)
-		button.Y = float32(text.PosY - padding)
-
-		button.Color = rl.Black
-
-		return button
-	}()
+	button := ui.NewButton(
+		float32((screenWidth/2))-(button.Width()/2),
+		float32((screenHeight/2))-(button.Height()/2),
+		"Quit Game",
+		16,
+		12,
+		12,
+		rl.Red,
+		rl.Black,
+	)
 
 	background := func() Background {
 		background := Background{}
@@ -75,13 +54,11 @@ func NewMenu(screenWidth int32, screenHeight int32) Menu {
 
 	return Menu{
 		Button:     button,
-		Text:       text,
 		Background: background,
 	}
 }
 
 func (menu *Menu) Draw() {
 	rl.DrawRectangleRec(menu.Background.Rectangle, menu.Background.Color)
-	rl.DrawRectangleRec(menu.Button.Rectangle, menu.Button.Color)
-	rl.DrawText(menu.Text.Content, menu.Text.PosX, menu.Text.PosY, menu.Text.FontSize, menu.Text.Color)
+	menu.Button.Draw()
 }

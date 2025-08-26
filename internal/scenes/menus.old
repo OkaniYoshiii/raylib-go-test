@@ -1,0 +1,74 @@
+package scenes
+
+import (
+	"github.com/OkaniYoshiii/raylib-go-test/internal/overlays"
+	"github.com/OkaniYoshiii/raylib-go-test/internal/ui"
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
+
+type MainMenu struct {
+	Title   ui.Text
+	Button  ui.Button
+	Overlay overlays.Menu
+}
+
+func NewMainMenu(screenWidth int32, screenHeight int32) MainMenu {
+	title := ui.NewText(ui.TextState{
+		Content:  "Untitled Game",
+		FontSize: 32,
+		Color:    rl.Red,
+	})
+
+	title.State.X = float32((screenWidth / 2) - (rl.MeasureText(title.State.Content, title.State.FontSize) / 2))
+	title.State.Y = float32((screenHeight / 2) - (title.State.FontSize / 2))
+
+	button := ui.NewButton(ui.ButtonState{
+		Label:           "Click to START",
+		PaddingInline:   12,
+		PaddingBlock:    8,
+		FontSize:        16,
+		Color:           rl.Black,
+		BackgroundColor: rl.Red,
+	})
+
+	button.State.X = 0
+	button.State.Y = 0
+
+	menuOverlay := overlays.NewMenu(screenWidth, screenHeight)
+
+	return MainMenu{
+		Title:   title,
+		Button:  button,
+		Overlay: menuOverlay,
+	}
+}
+
+func (menu *MainMenu) Update() {
+	menu.Button.State = menu.Button.InitialState
+
+	if menu.Overlay.IsVisible {
+		isClickOutsideOfBackground := rl.IsMouseButtonPressed(rl.MouseButtonLeft) && !rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Overlay.Background.Rectangle)
+		if isClickOutsideOfBackground || rl.IsKeyPressed(rl.KeyEscape) {
+			menu.Overlay.IsVisible = !menu.Overlay.IsVisible
+		}
+	} else {
+		if rl.IsKeyPressed(rl.KeyEscape) {
+			menu.Overlay.IsVisible = true
+		}
+
+		if rl.CheckCollisionPointRec(rl.GetMousePosition(), menu.Button.Rectangle()) {
+			menu.Button.State = menu.Button.HoverState
+		}
+	}
+}
+
+func (menu *MainMenu) Draw() {
+	rl.ClearBackground(rl.White)
+
+	menu.Title.Draw()
+	menu.Button.Draw()
+
+	if menu.Overlay.IsVisible {
+		menu.Overlay.Draw()
+	}
+}
